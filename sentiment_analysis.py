@@ -20,12 +20,13 @@ for i in range(16,45):
 # We remove the (){} from all words and we count how often each word occurs and save this in a dataframe called 'words_IPCC'
 per_word = text.split()
 for i in range(len(per_word)):
-    per_word[i]=per_word[i].replace('(','').replace(')','').replace('{','').replace('}','')
+    for characters in ['1','2','3','4','5','6','7','8','9','0','!','(',')','-','?',',','.','"',':',';','_','[',']','{','}','\n']:
+        per_word[i]=per_word[i].replace(characters, '')
 words_IPCC=pd.DataFrame.from_dict(Counter(per_word), orient='index').reset_index()
 words_IPCC.columns=['word','freq']
 
 # You can check what it looks like by typing per_word or words_IPCC:
-#words_IPCC
+#print(words_IPCC)
 # Can you already spot some mistakes? Can you think of pre-processing steps to fix those mistakes?
 
 # We load the file with the sentiment scores (The ANEW lexicon)
