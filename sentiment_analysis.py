@@ -44,11 +44,14 @@ def analysis_function(report):
     # Separate into positive and negative sentiment:
     df_report_sent['valpos']=df_report_sent[df_report_sent['ValMN'] >= 0].freq*df_report_sent[df_report_sent['ValMN'] >= 0].ValMN
     df_report_sent['valneg']=df_report_sent[df_report_sent['ValMN'] < 0].freq*df_report_sent[df_report_sent['ValMN'] < 0].ValMN
+    df_report_sent['arousal'] = df_report_sent['freq'] * df_report_sent['AroMN']
 
     # Normalize on number of words: 
     sentiment_neg = sum(df_report_sent[df_report_sent['ValMN'] < 0].valneg) / len(per_word)
     sentiment_pos = sum(df_report_sent[df_report_sent['ValMN'] >= 0].valpos) / len(per_word)
-    sentiment = [sentiment_neg, sentiment_pos]
+    arousal_value = sum(df_report_sent['arousal']) / len(per_word)
+
+    sentiment = [sentiment_neg, sentiment_pos, arousal_value]
 
     return sentiment
 
