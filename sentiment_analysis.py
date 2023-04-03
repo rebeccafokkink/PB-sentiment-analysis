@@ -18,7 +18,8 @@ for i in range(16,45):
 #text
 
 # We remove the (){} from all words and we count how often each word occurs and save this in a dataframe called 'words_IPCC'
-per_word = text.split()
+text_lower = text.lower()
+per_word = text_lower.split()
 for i in range(len(per_word)):
     for characters in ['1','2','3','4','5','6','7','8','9','0','!','(',')','-','?',',','.','"',':',';','_','[',']','{','}','\n']:
         per_word[i]=per_word[i].replace(characters, '')
