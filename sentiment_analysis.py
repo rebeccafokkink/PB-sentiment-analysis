@@ -44,8 +44,12 @@ df_IPCCsent= pd.merge(words_IPCC, sent, how="inner", on='word')
 df_IPCCsent['valpos']=df_IPCCsent[df_IPCCsent['ValMN'] >= 0].freq*df_IPCCsent[df_IPCCsent['ValMN'] >= 0].ValMN
 df_IPCCsent['valneg']=df_IPCCsent[df_IPCCsent['ValMN'] < 0].freq*df_IPCCsent[df_IPCCsent['ValMN'] < 0].ValMN
 
+#arousal
+df_IPCCsent['arousal']=df_IPCCsent[df_IPCCsent['AroMN']].freq*df_IPCCsent[df_IPCCsent['AroMN']].AroMN
+
 # Normalize on number of words: 
 AR6_pm_neg = sum(df_IPCCsent[df_IPCCsent['ValMN'] < 0].valneg) / len(per_word)
 AR6_pm_pos = sum(df_IPCCsent[df_IPCCsent['ValMN'] >= 0].valpos) / len(per_word)
+AR6_pm_aro = sum(df_IPCCsent[df_IPCCsent['AroMN']])/len(per_word)
 
-print(AR6_pm_neg, AR6_pm_pos)
+print(AR6_pm_neg, AR6_pm_pos, AR6_pm_aro)
