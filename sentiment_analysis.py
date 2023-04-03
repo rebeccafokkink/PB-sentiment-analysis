@@ -44,6 +44,8 @@ def analysis_function(report):
     # Separate into positive and negative sentiment:
     df_report_sent['valpos']=df_report_sent[df_report_sent['ValMN'] >= 0].freq*df_report_sent[df_report_sent['ValMN'] >= 0].ValMN
     df_report_sent['valneg']=df_report_sent[df_report_sent['ValMN'] < 0].freq*df_report_sent[df_report_sent['ValMN'] < 0].ValMN
+
+    # Arousal analysis
     df_report_sent['arousal'] = df_report_sent['freq'] * df_report_sent['AroMN']
 
     # Normalize on number of words: 
@@ -57,6 +59,15 @@ def analysis_function(report):
 
 AR6 = analysis_function('IPCC_AR6.pdf')
 print(AR6)
+
+# Plotting the data as a scatter plot
+sentiments = ['Arousal', 'Negative Sentiment', 'Positive Sentiment']
+plt.scatter(sentiments, AR6)
+plt.title('Scatter Plot of Report Analysis')
+plt.xlabel('Categories')
+plt.ylabel('Scores')
+plt.show()
+
 
 #def range(s, e,i):
 #   return list(range(s,e,i))
