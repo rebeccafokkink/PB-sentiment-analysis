@@ -45,7 +45,7 @@ def analysis_function(report, x, y):
     sentiment_pos = sum(df_report_sent[df_report_sent['ValMN'] >= 0].valpos) / len(per_word)
     arousal_value = sum(df_report_sent['arousal']) / len(per_word)
 
-    sentiment = [sentiment_neg, sentiment_pos, arousal_value]
+    sentiment = {'pos': sentiment_pos, 'neg': sentiment_neg, 'arousal': arousal_value}
 
     return sentiment
 
@@ -57,10 +57,25 @@ IPBES_2022 = analysis_function('IPBES_2022.pdf',3,37)
 # IPCC report analysis
 AR6 = analysis_function('IPCC_AR6.pdf',16,45)
 
-# Plotting the data as a scatter plot
-categories = ['Arousal', 'Negative Sentiment', 'Positive Sentiment']
-plt.scatter(categories, AR6)
-plt.title('Scatter Plot of Report Analysis')
-plt.xlabel('Categories')
-plt.ylabel('Scores')
+years = [1980]
+
+plt.scatter(
+    x= years,
+    y= AR6['pos'],
+    c='green',
+    alpha=0.5,
+)
+
+plt.scatter(
+    x= years,
+    y= AR6['neg'],
+    c='red',
+    alpha=0.5,
+)
+
+plt.title("Sentiment Analysis of IPCC AR6")
+plt.legend(["Positive Sentiment", "Negative Sentiment"])
+plt.xlabel("Year")
+plt.ylabel("Scores")
+
 plt.show()
