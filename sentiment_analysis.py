@@ -53,30 +53,43 @@ def analysis_function(report):
     sentiment_pos = sum(df_report_sent[df_report_sent['ValMN'] >= 0].valpos) / len(per_word)
     arousal_value = sum(df_report_sent['arousal']) / len(per_word)
 
-    sentiment = [sentiment_neg, sentiment_pos, arousal_value]
+    sentiment = {'pos': sentiment_pos, 'neg': sentiment_neg, 'arousal': arousal_value}
 
     return sentiment
 
 AR6 = analysis_function('IPCC_AR6.pdf')
 print(AR6)
 
-# Plotting the data as a scatter plot
-categories = ['Arousal', 'Negative Sentiment', 'Positive Sentiment']
-plt.scatter(categories, AR6)
-plt.title('Scatter Plot of Report Analysis')
-plt.xlabel('Categories')
-plt.ylabel('Scores')
+years = [1980]
+
+plt.scatter(
+    x= years,
+    y= AR6['pos'],
+    c='green',
+    alpha=0.5,
+)
+
+plt.scatter(
+    x= years,
+    y= AR6['neg'],
+    c='red',
+    alpha=0.5,
+)
+
+plt.title("Sentiment Analysis of IPCC AR6")
+plt.legend(["Positive Sentiment", "Negative Sentiment"])
+plt.xlabel("Year")
+plt.ylabel("Scores")
+
 plt.show()
 
-#def range(s, e,i):
-#   return list(range(s,e,i))
 
-# Driver Code
-#start, end, intval = -0.1, 0.1 , 0.001
-#ANEW_range = range(start,end,intval)
 
-#plt.plot(AR6, ANEW_range)
-#plt.title("Sentiment scores")
-#plt.xlabel("Report (year)")
-#plt.ylabel("ANEW sentiment")
-#plt.savefig("AR6_fig")
+
+# Plotting the data as a scatter plot
+#categories = ['Arousal', 'Negative Sentiment', 'Positive Sentiment']
+#plt.scatter(categories, AR6)
+#plt.title('Scatter Plot of Report Analysis')
+#plt.xlabel('Categories')
+#plt.ylabel('Scores')
+#plt.show()
