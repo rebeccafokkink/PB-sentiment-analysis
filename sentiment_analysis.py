@@ -61,13 +61,12 @@ AR6 = analysis_function('IPCC_AR6.pdf')
 print(AR6)
 
 # Plotting the data as a scatter plot
-sentiments = ['Arousal', 'Negative Sentiment', 'Positive Sentiment']
-plt.scatter(sentiments, AR6)
+categories = ['Arousal', 'Negative Sentiment', 'Positive Sentiment']
+plt.scatter(categories, AR6)
 plt.title('Scatter Plot of Report Analysis')
 plt.xlabel('Categories')
 plt.ylabel('Scores')
 plt.show()
-
 
 #def range(s, e,i):
 #   return list(range(s,e,i))
