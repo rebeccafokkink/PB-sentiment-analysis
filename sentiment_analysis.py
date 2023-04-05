@@ -65,14 +65,17 @@ years = [1980]
 plt.scatter(
     x= years,
     y= AR6['pos'],
-    c='green',
+    c=AR6['arousal'],  # use arousal values for color
+    cmap='viridis',   # choose a colormap
     alpha=0.5,
+    marker="d",
 )
 
 plt.scatter(
     x= years,
     y= AR6['neg'],
-    c='red',
+    c=AR6['arousal'],  # use arousal values for color
+    cmap='viridis',   # choose a colormap
     alpha=0.5,
 )
 
@@ -80,10 +83,14 @@ plt.title("Sentiment Analysis of IPCC AR6")
 plt.legend(["Positive Sentiment", "Negative Sentiment"])
 plt.xlabel("Year")
 plt.ylabel("Scores")
+plt.text(
+    0.00,
+    1900,
+    "Color of marker = value of arousal",
+)
+plt.colorbar()
 
 plt.show()
-
-
 
 
 # Plotting the data as a scatter plot
