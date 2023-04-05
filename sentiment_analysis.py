@@ -4,13 +4,13 @@ import pandas as pd
 from collections import Counter
 import matplotlib.pyplot as plt
 
-def analysis_function(report):
+def analysis_function(report, x, y):
     # We load one of the pdfs for analysis, in this example IPCC, AR6:
     reader = PdfReader(report)
 
     # We make sure all text from the required pages is gathered in a string called 'text':
     text=''
-    for i in range(16,45):
+    for i in range(x,y):
         page = reader.pages[i]
         t = page.extract_text()
         text = text + ' ' + t  
@@ -57,7 +57,7 @@ def analysis_function(report):
 
     return sentiment
 
-AR6 = analysis_function('IPCC_AR6.pdf')
+AR6 = analysis_function('IPCC_AR6.pdf',16,45)
 print(AR6)
 
 # Plotting the data as a scatter plot
@@ -67,16 +67,3 @@ plt.title('Scatter Plot of Report Analysis')
 plt.xlabel('Categories')
 plt.ylabel('Scores')
 plt.show()
-
-#def range(s, e,i):
-#   return list(range(s,e,i))
-
-# Driver Code
-#start, end, intval = -0.1, 0.1 , 0.001
-#ANEW_range = range(start,end,intval)
-
-#plt.plot(AR6, ANEW_range)
-#plt.title("Sentiment scores")
-#plt.xlabel("Report (year)")
-#plt.ylabel("ANEW sentiment")
-#plt.savefig("AR6_fig")
