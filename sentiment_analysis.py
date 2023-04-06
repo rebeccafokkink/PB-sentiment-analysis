@@ -1,24 +1,23 @@
-# First we install some libraries
+# Install some libraries
 from PyPDF2 import PdfReader
 import pandas as pd
 from collections import Counter
 import matplotlib.pyplot as plt
 
-def analysis_function(report):
-    # We load one of the pdfs for analysis, in this example IPCC, AR6:
+#Function to do analysis for all reports
+def analysis_function(report, x, y):
+    # We load one of the pdfs for analysis
     reader = PdfReader(report)
 
     # We make sure all text from the required pages is gathered in a string called 'text':
     text=''
-    for i in range(16,45):
+    for i in range(x,y):
         page = reader.pages[i]
         t = page.extract_text()
         text = text + ' ' + t  
 
-    # You can check how it looks by running this cell:
-    #text
-
-    # We remove the (){} from all words and we count how often each word occurs and save this in a dataframe called 'words_IPCC'
+    # We remove the special characters from all words, make them lower case
+    # and we count how often each word occurs and save this in a dataframe
     text_lower = text.lower()
     per_word = text_lower.split()
     for i in range(len(per_word)):
@@ -27,16 +26,9 @@ def analysis_function(report):
         words_report=pd.DataFrame.from_dict(Counter(per_word), orient='index').reset_index()
         words_report.columns=['word','freq']
 
-    # You can check what it looks like by typing per_word or words_report:
-    #print(words_report)
-    # Can you already spot some mistakes? Can you think of pre-processing steps to fix those mistakes?
-
     # We load the file with the sentiment scores (The ANEW lexicon)
     sent=pd.read_csv('ANEW.txt',sep='\t',header=None,names=['word','wordnr','ValMN','ValSD','AroMN','AroSD','DomMN','DomSD','Frequency'])
     sent.ValMN=sent.ValMN-5
-
-    # Check how it looks:
-    #sent
 
     # Merge the dataframes:
     df_report_sent= pd.merge(words_report, sent, how="inner", on='word')
@@ -45,7 +37,7 @@ def analysis_function(report):
     df_report_sent['valpos']=df_report_sent[df_report_sent['ValMN'] >= 0].freq*df_report_sent[df_report_sent['ValMN'] >= 0].ValMN
     df_report_sent['valneg']=df_report_sent[df_report_sent['ValMN'] < 0].freq*df_report_sent[df_report_sent['ValMN'] < 0].ValMN
 
-    # Arousal analysis
+    # Arousal scores
     df_report_sent['arousal'] = df_report_sent['freq'] * df_report_sent['AroMN']
 
     # Normalize on number of words: 
@@ -57,8 +49,13 @@ def analysis_function(report):
 
     return sentiment
 
-AR6 = analysis_function('IPCC_AR6.pdf')
-print(AR6)
+# IPBES report analysis
+IPBES_2016 = analysis_function('IPBES_2016.pdf',2,22)
+IPBES_2019 = analysis_function('IPBES_2019.pdf',3,38)
+IPBES_2022 = analysis_function('IPBES_2022.pdf',3,37)
+
+# IPCC report analysis
+AR6 = analysis_function('IPCC_AR6.pdf',16,45)
 
 years = [1980]
 
@@ -91,6 +88,8 @@ plt.text(
 plt.colorbar()
 
 plt.show()
+
+
 
 
 # Plotting the data as a scatter plot
