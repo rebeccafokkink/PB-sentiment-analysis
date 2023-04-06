@@ -3,9 +3,14 @@ from PyPDF2 import PdfReader
 import pandas as pd
 from collections import Counter
 import matplotlib.pyplot as plt
+import numpy as np
+
+# Load ANEW lexicon
+ANEW = pd.read_csv('ANEW.TXT', sep='\t', header=None, names=['word', 'wordnr', 'ValMN', 'ValSD', 'AroMN', 'AroSD', 'DomMN', 'DomSD', 'Frequency'])
+ANEW.ValMN = ANEW.ValMN - 5
 
 #Function to do analysis for all reports
-def analysis_function(report, x, y):
+def analysis_function(report, x, y, ANEW):
     # We load one of the pdfs for analysis
     reader = PdfReader(report)
 
@@ -26,12 +31,8 @@ def analysis_function(report, x, y):
         words_report=pd.DataFrame.from_dict(Counter(per_word), orient='index').reset_index()
         words_report.columns=['word','freq']
 
-    # We load the file with the sentiment scores (The ANEW lexicon)
-    sent=pd.read_csv('ANEW.txt',sep='\t',header=None,names=['word','wordnr','ValMN','ValSD','AroMN','AroSD','DomMN','DomSD','Frequency'])
-    sent.ValMN=sent.ValMN-5
-
     # Merge the dataframes:
-    df_report_sent= pd.merge(words_report, sent, how="inner", on='word')
+    df_report_sent= pd.merge(words_report, ANEW, how="inner", on='word')
 
     # Separate into positive and negative sentiment:
     df_report_sent['valpos']=df_report_sent[df_report_sent['ValMN'] >= 0].freq*df_report_sent[df_report_sent['ValMN'] >= 0].ValMN
@@ -45,57 +46,53 @@ def analysis_function(report, x, y):
     sentiment_pos = sum(df_report_sent[df_report_sent['ValMN'] >= 0].valpos) / len(per_word)
     arousal_value = sum(df_report_sent['arousal']) / len(per_word)
 
-    sentiment = {'pos': sentiment_pos, 'neg': sentiment_neg, 'arousal': arousal_value}
+    analysis_scores = [sentiment_pos, sentiment_neg, arousal_value]
 
-    return sentiment
-
-# IPBES report analysis
-IPBES_2016 = analysis_function('IPBES_2016.pdf',2,22)
-IPBES_2019 = analysis_function('IPBES_2019.pdf',3,38)
-IPBES_2022 = analysis_function('IPBES_2022.pdf',3,37)
+    return analysis_scores
 
 # IPCC report analysis
-AR6 = analysis_function('IPCC_AR6.pdf',16,45)
+AR6 = analysis_function('IPCC_AR6.pdf',16,45, ANEW)
 
-years = [1980]
+# IPBES report analysis
+IPBES_2016 = analysis_function('IPBES_2016.pdf', 2, 22, ANEW)
+IPBES_2019 = analysis_function('IPBES_2019.pdf', 3, 38, ANEW)
+IPBES_2022 = analysis_function('IPBES_2022.pdf', 2, 37, ANEW)
 
-plt.scatter(
-    x= years,
-    y= AR6['pos'],
-    c=AR6['arousal'],  # use arousal values for color
-    cmap='viridis',   # choose a colormap
-    alpha=0.5,
-    marker="d",
-)
+IPBES_reports = [IPBES_2016, IPBES_2019, IPBES_2022]  # create a list of IPBES report data
 
-plt.scatter(
-    x= years,
-    y= AR6['neg'],
-    c=AR6['arousal'],  # use arousal values for color
-    cmap='viridis',   # choose a colormap
-    alpha=0.5,
-)
+print(AR6)
+print(IPBES_2016)
+print(IPBES_2019)
+print(IPBES_2022)
 
-plt.title("Sentiment Analysis of IPCC AR6")
-plt.legend(["Positive Sentiment", "Negative Sentiment"])
-plt.xlabel("Year")
-plt.ylabel("Scores")
-plt.text(
-    0.00,
-    1900,
-    "Color of marker = value of arousal",
-)
-plt.colorbar()
+IPBES_reports = [IPBES_2016, IPBES_2019, IPBES_2022]  # create a list of IPBES report data
+
+# Creating scatter plots 
+
+years_IPCC = [2023, 2023]
+
+years_IPBES = [2016, 2016, 2019, 2019, 2022, 2022]
+
+fig, axs = plt.subplots(1, 2, figsize=(10, 5), sharey=True)
+
+# Scatter plot for IPCC reports
+axs[0].scatter(years_IPCC, AR6[0], c= None, cmap='viridis', alpha=0.5, marker="d")
+axs[0].scatter(years_IPCC, AR6[1], c= None, cmap='viridis', alpha=0.5)
+
+# Scatter plot for IPBES reports
+#arousal_map = {0: (0, 1, 0), 1: (1, 1, 0), 2: (1, 0, 0)}  # dictionary for mapping arousal values to colors
+
+for i, IPBES_report in enumerate(IPBES_reports):
+    axs[1].scatter(years_IPBES, IPBES_report[0], c=IPBES_report[2], alpha=0.5, marker="d")
+    axs[1].scatter(years_IPBES, IPBES_report[1], c=IPBES_report[2], alpha=0.5)
+
+axs[0].set_title("Sentiment Analysis of IPCC AR6")
+axs[1].set_title("Sentiment and Arousal Analysis of IPBES 2016-2022")
+axs[0].set_xlabel("Year")
+axs[1].set_xlabel("Year")
+axs[0].set_ylabel("Scores")
+axs[1].set_ylabel("Scores")
+axs[0].legend(["Positive Sentiment", "Negative Sentiment"])
+axs[1].legend(["Positive Sentiment", "Negative Sentiment"])
 
 plt.show()
-
-
-
-
-# Plotting the data as a scatter plot
-#categories = ['Arousal', 'Negative Sentiment', 'Positive Sentiment']
-#plt.scatter(categories, AR6)
-#plt.title('Scatter Plot of Report Analysis')
-#plt.xlabel('Categories')
-#plt.ylabel('Scores')
-#plt.show()
