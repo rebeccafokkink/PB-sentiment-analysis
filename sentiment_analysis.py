@@ -4,6 +4,7 @@ import pandas as pd
 from collections import Counter
 import matplotlib.pyplot as plt
 import numpy as np
+from datetime import datetime, timedelta
 
 # Load ANEW lexicon
 ANEW = pd.read_csv('ANEW.TXT', sep='\t', header=None, names=['word', 'wordnr', 'ValMN', 'ValSD', 'AroMN', 'AroSD', 'DomMN', 'DomSD', 'Frequency'])
@@ -28,8 +29,8 @@ def analysis_function(report, x, y, ANEW):
     for i in range(len(per_word)):
         for characters in ['1','2','3','4','5','6','7','8','9','0','!','(',')','-','?',',','.','"',':',';','_','[',']','{','}','\n']:
             per_word[i]=per_word[i].replace(characters, '')
-        words_report=pd.DataFrame.from_dict(Counter(per_word), orient='index').reset_index()
-        words_report.columns=['word','freq']
+    words_report=pd.DataFrame.from_dict(Counter(per_word), orient='index').reset_index()
+    words_report.columns=['word','freq']
 
     # Merge the dataframes:
     df_report_sent= pd.merge(words_report, ANEW, how="inner", on='word')
@@ -58,41 +59,27 @@ IPBES_2016 = analysis_function('IPBES_2016.pdf', 2, 22, ANEW)
 IPBES_2019 = analysis_function('IPBES_2019.pdf', 3, 38, ANEW)
 IPBES_2022 = analysis_function('IPBES_2022.pdf', 2, 37, ANEW)
 
-IPBES_reports = [IPBES_2016, IPBES_2019, IPBES_2022]  # create a list of IPBES report data
-
 print(AR6)
 print(IPBES_2016)
 print(IPBES_2019)
 print(IPBES_2022)
 
-IPBES_reports = [IPBES_2016, IPBES_2019, IPBES_2022]  # create a list of IPBES report data
+#create DataFrame for IPBES reports
+IPBES_data = pd.DataFrame({'x': [2016, 2019, 2022],
+                   'y1': [IPBES_2016[0], IPBES_2019[0], IPBES_2022[0]],
+                   'y2': [IPBES_2016[1], IPBES_2019[1], IPBES_2022[1]],
+                   'z': [IPBES_2016[2], IPBES_2019[2], IPBES_2022[2]]})
 
-# Creating scatter plots 
+years_datetime_IPBES = pd.to_datetime(IPBES_data['x'], format='%Y') # converting list into datetime format
 
-years_IPCC = [2023, 2023]
+plt.scatter(IPBES_data.x, IPBES_data.y1, s=100, c=IPBES_data.z, cmap='viridis', marker='d')
+plt.scatter(IPBES_data.x, IPBES_data.y2, s=100, c=IPBES_data.z, cmap='viridis')
 
-years_IPBES = [2016, 2016, 2019, 2019, 2022, 2022]
+plt.title("Sentiment & Arousal Analysis of IPBES reports (2016-2022)")
+plt.legend(["Positive Sentiment", "Negative Sentiment"])
+plt.xlabel("Year")
+plt.ylabel("Sentiment Scores")
 
-fig, axs = plt.subplots(1, 2, figsize=(10, 5), sharey=True)
-
-# Scatter plot for IPCC reports
-axs[0].scatter(years_IPCC, AR6[0], c= None, cmap='viridis', alpha=0.5, marker="d")
-axs[0].scatter(years_IPCC, AR6[1], c= None, cmap='viridis', alpha=0.5)
-
-# Scatter plot for IPBES reports
-#arousal_map = {0: (0, 1, 0), 1: (1, 1, 0), 2: (1, 0, 0)}  # dictionary for mapping arousal values to colors
-
-for i, IPBES_report in enumerate(IPBES_reports):
-    axs[1].scatter(years_IPBES, IPBES_report[0], c=IPBES_report[2], alpha=0.5, marker="d")
-    axs[1].scatter(years_IPBES, IPBES_report[1], c=IPBES_report[2], alpha=0.5)
-
-axs[0].set_title("Sentiment Analysis of IPCC AR6")
-axs[1].set_title("Sentiment and Arousal Analysis of IPBES 2016-2022")
-axs[0].set_xlabel("Year")
-axs[1].set_xlabel("Year")
-axs[0].set_ylabel("Scores")
-axs[1].set_ylabel("Scores")
-axs[0].legend(["Positive Sentiment", "Negative Sentiment"])
-axs[1].legend(["Positive Sentiment", "Negative Sentiment"])
+plt.colorbar(label = 'Arousal Score')
 
 plt.show()
