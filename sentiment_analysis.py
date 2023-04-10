@@ -51,20 +51,25 @@ def analysis_function(report, x, y, ANEW):
 
     return analysis_scores
 
-# IPCC report analysis
-AR6 = analysis_function('IPCC_AR6.pdf',16,45, ANEW)
-
-# IPBES report analysis
+# IPBES reports analysis
 IPBES_2016 = analysis_function('IPBES_2016.pdf', 2, 22, ANEW)
 IPBES_2019 = analysis_function('IPBES_2019.pdf', 3, 38, ANEW)
 IPBES_2022 = analysis_function('IPBES_2022.pdf', 2, 37, ANEW)
 
-print(AR6)
-print(IPBES_2016)
-print(IPBES_2019)
-print(IPBES_2022)
+# IPCC reports analysis
+IPCC_2001 = analysis_function('IPCC_2001.pdf', 2, 34, ANEW)
+IPCC_2007 = analysis_function('IPCC_2007.pdf', 2, 22, ANEW)
+IPCC_2014 = analysis_function('IPCC_2014.pdf', 2, 32, ANEW)
+IPCC_2023 = analysis_function('IPCC_2023.pdf', 4, 36, ANEW)
 
-#create DataFrame for IPBES reports
+# ozone reports analysis
+ozone_1985 = analysis_function('ozone_1985.pdf', 2, 26, ANEW)
+#ozone_1994 = analysis_function('ozone_1994.pdf', 13, 24, ANEW) (creates an error)
+ozone_2006 = analysis_function('ozone_2006.pdf', 19, 37, ANEW)
+ozone_2014 = analysis_function('ozone_2014.pdf', 17, 43, ANEW)
+ozone_2022 = analysis_function('ozone_2022.pdf', 10, 48, ANEW)
+
+# create DataFrame for IPBES reports
 IPBES_data = pd.DataFrame({'x': [2016, 2019, 2022],
                    'y1': [IPBES_2016[0], IPBES_2019[0], IPBES_2022[0]],
                    'y2': [IPBES_2016[1], IPBES_2019[1], IPBES_2022[1]],
@@ -82,4 +87,4 @@ plt.ylabel("Sentiment Scores")
 
 plt.colorbar(label = 'Arousal Score')
 
-plt.show()
+plt.savefig('IPBES_analysis.png')
