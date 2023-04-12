@@ -59,12 +59,13 @@ IPBES_2016 = analysis_function('IPBES_2016.pdf', 2, 22, ANEW)
 IPBES_2019 = analysis_function('IPBES_2019.pdf', 3, 38, ANEW)
 IPBES_2022 = analysis_function('IPBES_2022.pdf', 2, 37, ANEW)
 
+# check whether values are sensible
 print(AR6)
 print(IPBES_2016)
 print(IPBES_2019)
 print(IPBES_2022)
 
-#create DataFrame for IPBES reports
+# create dataframe for IPBES reports
 IPBES_data = pd.DataFrame({'x': [2016, 2019, 2022],
                    'y1': [IPBES_2016[0], IPBES_2019[0], IPBES_2022[0]],
                    'y2': [IPBES_2016[1], IPBES_2019[1], IPBES_2022[1]],
@@ -83,3 +84,25 @@ plt.ylabel("Sentiment Scores")
 plt.colorbar(label = 'Arousal Score')
 
 plt.show()
+plt.savefig('IPBES_figure.png')
+
+# create dataframe for IPCC reports
+IPCC_data = pd.DataFrame({'x': [2023],
+                    'y1': [AR6[0]],
+                    'y2': [AR6[1]],
+                    'z': [AR6[2]]})
+
+years_datetime_IPCC = pd.to_datetime(IPCC_data['x'], format= '%Y') # convert into datetime format
+
+plt.scatter(IPCC_data.x, IPCC_data.y1, c=IPCC_data.z, cmap='viridis', marker='d')
+plt.scatter(IPCC_data.x, IPCC_data.y2, c=IPCC_data.z, cmap='viridis')
+
+plt.title("Sentiment & Arousal Analysis of IPCC reports (20xx-2023)")
+plt.legend(["Positive Sentiment", "Negative Sentiment"])
+plt.xlabel("Year")
+plt.ylabel("Sentiment Scores")
+
+plt.colorbar(label = 'Arousal Score')
+
+plt.show()
+plt.savefig('IPCC_figure.png')
