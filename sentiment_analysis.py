@@ -72,32 +72,44 @@ print(IPCC_2014)
 print(IPCC_2023)
 
 # ozone reports analysis
-ozone_1985 = analysis_function('ozone_1985.pdf', 2, 26, ANEW)
+#ozone_1985 = analysis_function('ozone_1985.pdf', 2, 26, ANEW)
 #ozone_1994 = analysis_function('ozone_1994.pdf', 13, 24, ANEW) (creates an error)
 ozone_2006 = analysis_function('ozone_2006.pdf', 19, 37, ANEW)
-ozone_2014 = analysis_function('ozone_2014.pdf', 17, 43, ANEW)
+#ozone_2014 = analysis_function('ozone_2014.pdf', 17, 43, ANEW)
 ozone_2022 = analysis_function('ozone_2022.pdf', 10, 48, ANEW)
 
 #create DataFrame for IPBES reports
 IPBES_data = pd.DataFrame({'x': [2016, 2019, 2022],
                    'y1': [IPBES_2016[0], IPBES_2019[0], IPBES_2022[0]],
                    'y2': [IPBES_2016[1], IPBES_2019[1], IPBES_2022[1]],
-                   'z': [IPBES_2016[2], IPBES_2019[2], IPBES_2022[2]]})
+                   'y3': [IPBES_2016[2], IPBES_2019[2], IPBES_2022[2]]})
 
 years_datetime_IPBES = pd.to_datetime(IPBES_data['x'], format='%Y') # converting list into datetime format
 
-plt.scatter(IPBES_data.x, IPBES_data.y1, s=100, c=IPBES_data.z, cmap='viridis', marker='d')
-plt.scatter(IPBES_data.x, IPBES_data.y2, s=100, c=IPBES_data.z, cmap='viridis')
+# create the figure and axes objects
+fig, ax1 = plt.subplots()
 
-plt.title("Sentiment & Arousal Analysis of IPBES reports (2016-2022)")
-plt.legend(["Positive Sentiment", "Negative Sentiment"])
-plt.xlabel("Year")
-plt.ylabel("Sentiment Scores")
+# create the first plot (y1 vs. x)
+pos_sentiment = ax1.scatter(IPBES_data.x, IPBES_data.y1, s=100, c='red', marker='d')
+neg_sentiment = ax1.scatter(IPBES_data.x, IPBES_data.y2, s=100, c='red')
+ax1.set_xlabel('Year')
+ax1.set_ylabel('Sentiment Scores')
 
-plt.colorbar(label = 'Arousal Score')
+# create the second plot (y2 vs. x)
+ax2 = ax1.twinx()
+arousal = ax2.scatter(IPBES_data.x, IPBES_data.y3, s=100, c='blue', marker='*')
+ax2.set_ylabel('Arousal Scores')
+ax2.tick_params(axis='y', colors='blue')
 
-plt.show()
+# add a title and legend
+plt.title('Sentiment & Arousal Analysis of IPBES reports (2016-2022)')
+plt.legend((pos_sentiment, neg_sentiment, arousal), ('Positive Sentiment', 'Negative Sentiment', 'Arousal'))
+
+# save and show the plot
+fig.tight_layout()
 plt.savefig('IPBES_figure.png')
+plt.show()
+
 
 # create dataframe for IPCC reports
 IPCC_data = pd.DataFrame({'x': [2001, 2007, 2014, 2023],
@@ -107,15 +119,15 @@ IPCC_data = pd.DataFrame({'x': [2001, 2007, 2014, 2023],
 
 years_datetime_IPCC = pd.to_datetime(IPCC_data['x'], format= '%Y') # convert into datetime format
 
-plt.scatter(IPCC_data.x, IPCC_data.y1, c=IPCC_data.z, cmap='viridis', marker='d')
-plt.scatter(IPCC_data.x, IPCC_data.y2, c=IPCC_data.z, cmap='viridis')
+plt.scatter(IPCC_data.x, IPCC_data.y1, c=IPCC_data.z, cmap='Oranges', marker='d')
+plt.scatter(IPCC_data.x, IPCC_data.y2, c=IPCC_data.z, cmap='Oranges')
 
-plt.title("Sentiment & Arousal Analysis of IPCC reports (20xx-2023)")
+plt.title("Sentiment & Arousal Analysis of IPCC reports (2001-2023)")
 plt.legend(["Positive Sentiment", "Negative Sentiment"])
 plt.xlabel("Year")
 plt.ylabel("Sentiment Scores")
 
 plt.colorbar(label = 'Arousal Score')
-
+fig.tight_layout()
 plt.show()
 plt.savefig('IPCC_figure.png')
