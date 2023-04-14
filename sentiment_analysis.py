@@ -51,21 +51,17 @@ def analysis_function(report, x, y, ANEW):
 
     return analysis_scores
 
-# IPCC report analysis
-AR6 = analysis_function('IPCC_AR6.pdf',16,45, ANEW)
-
-# IPBES report analysis
+# IPBES reports analysis
 IPBES_2016 = analysis_function('IPBES_2016.pdf', 2, 22, ANEW)
 IPBES_2019 = analysis_function('IPBES_2019.pdf', 3, 38, ANEW)
 IPBES_2022 = analysis_function('IPBES_2022.pdf', 2, 37, ANEW)
 
-# check whether values are sensible
 print(AR6)
 print(IPBES_2016)
 print(IPBES_2019)
 print(IPBES_2022)
 
-# create dataframe for IPBES reports
+#create DataFrame for IPBES reports
 IPBES_data = pd.DataFrame({'x': [2016, 2019, 2022],
                    'y1': [IPBES_2016[0], IPBES_2019[0], IPBES_2022[0]],
                    'y2': [IPBES_2016[1], IPBES_2019[1], IPBES_2022[1]],
