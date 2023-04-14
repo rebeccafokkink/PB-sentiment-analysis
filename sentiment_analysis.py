@@ -56,10 +56,27 @@ IPBES_2016 = analysis_function('IPBES_2016.pdf', 2, 22, ANEW)
 IPBES_2019 = analysis_function('IPBES_2019.pdf', 3, 38, ANEW)
 IPBES_2022 = analysis_function('IPBES_2022.pdf', 2, 37, ANEW)
 
-print(AR6)
 print(IPBES_2016)
 print(IPBES_2019)
 print(IPBES_2022)
+
+# IPCC reports analysis
+IPCC_2001 = analysis_function('IPCC_2001.pdf', 2, 34, ANEW)
+IPCC_2007 = analysis_function('IPCC_2007.pdf', 2, 22, ANEW)
+IPCC_2014 = analysis_function('IPCC_2014.pdf', 2, 32, ANEW)
+IPCC_2023 = analysis_function('IPCC_2023.pdf', 4, 36, ANEW)
+
+print(IPCC_2001)
+print(IPCC_2007)
+print(IPCC_2014)
+print(IPCC_2023)
+
+# ozone reports analysis
+ozone_1985 = analysis_function('ozone_1985.pdf', 2, 26, ANEW)
+#ozone_1994 = analysis_function('ozone_1994.pdf', 13, 24, ANEW) (creates an error)
+ozone_2006 = analysis_function('ozone_2006.pdf', 19, 37, ANEW)
+ozone_2014 = analysis_function('ozone_2014.pdf', 17, 43, ANEW)
+ozone_2022 = analysis_function('ozone_2022.pdf', 10, 48, ANEW)
 
 #create DataFrame for IPBES reports
 IPBES_data = pd.DataFrame({'x': [2016, 2019, 2022],
@@ -83,10 +100,10 @@ plt.show()
 plt.savefig('IPBES_figure.png')
 
 # create dataframe for IPCC reports
-IPCC_data = pd.DataFrame({'x': [2023],
-                    'y1': [AR6[0]],
-                    'y2': [AR6[1]],
-                    'z': [AR6[2]]})
+IPCC_data = pd.DataFrame({'x': [2001, 2007, 2014, 2023],
+                    'y1': [IPCC_2001[0], IPCC_2007[0], IPCC_2014 [0], IPCC_2023[0]],
+                    'y2': [IPCC_2001[1], IPCC_2007[1], IPCC_2014 [1], IPCC_2023[1]],
+                    'z': [IPCC_2001[2], IPCC_2007[2], IPCC_2014 [2], IPCC_2023[2]]})
 
 years_datetime_IPCC = pd.to_datetime(IPCC_data['x'], format= '%Y') # convert into datetime format
 
