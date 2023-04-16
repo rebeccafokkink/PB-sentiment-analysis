@@ -99,6 +99,9 @@ ozone_data = pd.DataFrame({'x': [1985, 2006, 2014, 2022],
 def plot_scatter(data, x_col, y1_col, y2_col, y3_col, title):
     years_datetime = pd.to_datetime(data[x_col], format='%Y') # converting list into datetime format
     
+    # extract the unique years from the datetime column
+    year_values = years_datetime.dt.year.unique()
+
     # create the figure and axes objects
     fig, ax1 = plt.subplots()
 
@@ -108,11 +111,19 @@ def plot_scatter(data, x_col, y1_col, y2_col, y3_col, title):
     ax1.set_xlabel('Year')
     ax1.set_ylabel('Sentiment Scores')
 
+    # set the x-ticks and x-tick labels for the first plot
+    ax1.set_xticks(year_values)
+    ax1.set_xticklabels(year_values, rotation=45, ha='right')
+
     # create the second plot (y2 vs. x)
     ax2 = ax1.twinx()
     arousal = ax2.scatter(data[x_col], data[y3_col], s=100, c='forestgreen', marker='*')
     ax2.set_ylabel('Arousal Scores')
     ax2.tick_params(axis='y', colors='forestgreen')
+
+    # set the x-ticks and x-tick labels for the first plot
+    ax2.set_xticks(year_values)
+    ax2.set_xticklabels(year_values, rotation=45, ha='right')
 
     # add a title and legend
     plt.title(title)
