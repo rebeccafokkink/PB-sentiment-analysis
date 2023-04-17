@@ -73,7 +73,7 @@ print(IPCC_2023)
 
 # ozone reports analysis
 ozone_1985 = analysis_function('ozone_1985.pdf', 2, 26, ANEW)
-#ozone_1994 = analysis_function('ozone_1994.pdf', 13, 24, ANEW) (creates an error)
+ozone_1998 = analysis_function('ozone_1998.pdf', 7, 19, ANEW)
 ozone_2006 = analysis_function('ozone_2006.pdf', 19, 37, ANEW)
 ozone_2014 = analysis_function('ozone_2014.pdf', 17, 43, ANEW)
 ozone_2022 = analysis_function('ozone_2022.pdf', 10, 48, ANEW)
@@ -91,10 +91,10 @@ IPCC_data = pd.DataFrame({'x': [2001, 2007, 2014, 2023],
                           'y3': [IPCC_2001[2], IPCC_2007[2], IPCC_2014[2], IPCC_2023[2]]})
 
 #create DataFrame for Ozone reports
-ozone_data = pd.DataFrame({'x': [1985, 2006, 2014, 2022],
-                             'y1': [ozone_1985[0], ozone_2006[0], ozone_2014[0], ozone_2022[0]],
-                             'y2': [ozone_1985[1], ozone_2006[1], ozone_2014[1], ozone_2022[1]],
-                             'y3': [ozone_1985[2], ozone_2006[2], ozone_2014[2], ozone_2022[2]],})
+ozone_data = pd.DataFrame({'x': [1985, 1998, 2006, 2014, 2022],
+                             'y1': [ozone_1985[0], ozone_1998[0], ozone_2006[0], ozone_2014[0], ozone_2022[0]],
+                             'y2': [ozone_1985[1], ozone_1998[1], ozone_2006[1], ozone_2014[1], ozone_2022[1]],
+                             'y3': [ozone_1985[2], ozone_1998[2], ozone_2006[2], ozone_2014[2], ozone_2022[2]],})
 
 def plot_scatter(data, x_col, y1_col, y2_col, y3_col, title):
     years_datetime = pd.to_datetime(data[x_col], format='%Y') # converting list into datetime format
@@ -135,9 +135,8 @@ def plot_scatter(data, x_col, y1_col, y2_col, y3_col, title):
 
     # save and show the plot
     fig.tight_layout()
-    plt.show()
 
 # call the function with the data and column names
 plot_scatter(IPBES_data, 'x', 'y1', 'y2', 'y3', 'Sentiment & Arousal Analysis of IPBES reports (2016-2022)')
 plot_scatter(IPCC_data, 'x', 'y1', 'y2', 'y3', 'Sentiment & Arousal Analysis of IPCC reports (2001-2023)')
-plot_scatter(ozone_data, 'x', 'y1', 'y2', 'y3', 'Sentiment & Arousal Analysis of Ozone Assessment reports (2001-2023)')
+plot_scatter(ozone_data, 'x', 'y1', 'y2', 'y3', 'Sentiment & Arousal Analysis of Ozone Assessment reports (1985-2022)')
