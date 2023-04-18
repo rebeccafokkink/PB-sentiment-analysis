@@ -133,9 +133,14 @@ def plot_scatter(data, x_col, y1_col, y2_col, y3_col, title):
     bbox_to_anchor=(0.5, 1.35),
     ncol=3)
 
-    # save and show the plot
+    # make second axis fit figure area
     fig.tight_layout()
     plt.show()
+
+    # save the figure
+    plt.savefig('IPCC_plot.png')
+    plt.savefig('IPBES_plot.png')
+    plt.savefig('ozone_plot.png')
 
 # call the function with the data and column names
 plot_scatter(IPBES_data, 'x', 'y1', 'y2', 'y3', 'Sentiment & Arousal Analysis of IPBES reports (2016-2022)')
