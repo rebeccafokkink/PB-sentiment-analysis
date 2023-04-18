@@ -135,6 +135,7 @@ def plot_scatter(data, x_col, y1_col, y2_col, y3_col, title):
 
     # save and show the plot
     fig.tight_layout()
+    plt.show()
 
 # call the function with the data and column names
 plot_scatter(IPBES_data, 'x', 'y1', 'y2', 'y3', 'Sentiment & Arousal Analysis of IPBES reports (2016-2022)')
