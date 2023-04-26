@@ -110,16 +110,17 @@ def plot_scatter(data, x_col, y1_col, y2_col, y3_col, title):
     neg_sentiment = ax1.scatter(data[x_col], data[y2_col], s=100, c='steelblue')
     ax1.set_xlabel('Year')
     ax1.set_ylabel('Sentiment Scores')
+    ax1.tick_params(axis='y', colors='steelblue')
 
     # set the x-ticks and x-tick labels for the first plot
     ax1.set_xticks(year_values)
     ax1.set_xticklabels(year_values, rotation=45, ha='right')
 
-    # create the second plot (y2 vs. x)
+    # create the second plot (y3 vs. x with x-offset of 0.25)
     ax2 = ax1.twinx()
-    arousal = ax2.scatter(data[x_col], data[y3_col], s=100, c='forestgreen', marker='*')
+    arousal = ax2.scatter(data[x_col] + 0.25, data[y3_col], s=100, c='orange', marker='*')
     ax2.set_ylabel('Arousal Scores')
-    ax2.tick_params(axis='y', colors='forestgreen')
+    ax2.tick_params(axis='y', colors='orange')
 
     # set the x-ticks and x-tick labels for the first plot
     ax2.set_xticks(year_values)
