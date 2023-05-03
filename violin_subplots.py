@@ -5,6 +5,7 @@ from collections import Counter
 import matplotlib.pyplot as plt
 
 ANEW = pd.read_csv('ANEW.TXT', sep='\t', header=None, names=['word', 'wordnr', 'ValMN', 'ValSD', 'AroMN', 'AroSD', 'DomMN', 'DomSD', 'Frequency'])
+ANEW.ValMN = ANEW.ValMN - 5
 
 # Function to do analysis for one report
 def analyze_report(report_path, page_start, page_end, ANEW):
@@ -25,7 +26,7 @@ def analyze_report(report_path, page_start, page_end, ANEW):
     words_report=pd.DataFrame.from_dict(Counter(per_word), orient='index').reset_index()
     words_report.columns=['word','freq']
     df_report_sent= pd.merge(words_report, ANEW, how="inner", on='word')
-    df_report_sent['sentiment'] = df_report_sent['ValMN'].apply(lambda x: 1 if x >= 5 else 0)
+    df_report_sent['sentiment'] = df_report_sent['ValMN'].apply(lambda x: 1 if x >= 0 else 0)
     
     return df_report_sent
 
@@ -47,8 +48,8 @@ def plot_subplots(report_filenames, page_ranges, ANEW, name):
 
         df_report_sent = analyze_report(report_filenames[i], *page_ranges[i], ANEW)
         pos_scores = df_report_sent[df_report_sent['sentiment'] == 1]['ValMN']
-        neg_scores = df_report_sent[df_report_sent['sentiment'] == 0]['ValMN']
-        axs[i].set_ylim(1, 9)
+        neg_scores = -1*df_report_sent[df_report_sent['sentiment'] == 0]['ValMN']
+        axs[i].set_ylim(-0.5, 5)
         violin_parts = axs[i].violinplot([pos_scores, neg_scores], showmeans=True, widths = 0.8)
         odd = 0
         for vp in violin_parts['bodies']:
@@ -62,7 +63,6 @@ def plot_subplots(report_filenames, page_ranges, ANEW, name):
         axs[i].set_ylabel('Sentiment Score')
         axs[i].set_xticks([1, 2])
         axs[i].set_xticklabels(['Positive', 'Negative'])
-        #axs[i].set_aspect(1)
 
     # Adjust the spacing between the subplots
     fig.subplots_adjust(hspace=0.3)
